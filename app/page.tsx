@@ -1,7 +1,7 @@
 "use client";
 
-import ConcertCard from "./components/ConcertCard";
-import GradientBlinds from "./components/reactbits/GradientBlinds";
+import ConcertCard from "../components/ConcertCard";
+import GradientBlinds from "../components/reactbits/GradientBlinds";
 
 export default function Home() {
   return (
@@ -43,7 +43,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="w-full h-auto py-8 px-16 flex flex-col space-y-8">
+      <section className="w-full h-auto py-8 px-16 flex flex-col space-y-8 pb-12">
         <div className="flex flex-col space-y-2">
           <h2 className="font-semibold text-xl">Upcoming Concerts</h2>
           <p className="text-gray-400">Discover and book tickets for the hottest events</p>
@@ -51,6 +51,7 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <ConcertCard
             id="ABCDEF-123456-HIJKLMN"
+            title="Justin Bieber Concert"
             image="https://variety.com/wp-content/uploads/2021/01/1294032168.jpg"
             venue="The O2 Arena"
             date="23 December 2023"
