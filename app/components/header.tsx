@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Header() {
     return (
         <nav className="w-full h-20 border-b border-indigo-400 z-999 fixed">
-            <div className="w-full h-full bg-slate-900/75 backdrop-blur-sm">
+            <div className="w-full h-full bg-slate-900/50 backdrop-blur-md">
                 <div className="w-full h-full flex justify-between px-4">
                     <Link href="/" className="flex space-x-2 items-center drop-shadow-lg drop-shadow-indigo-400 transition-all hover:drop-shadow-indigo-600 hover:scale-105">
                         <Image src="/assets/images/ticketwave.png" alt="ticketwave" width={75} height={0} />
