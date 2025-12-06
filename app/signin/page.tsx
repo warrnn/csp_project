@@ -11,7 +11,7 @@ export default function SignIn() {
             </div>
 
             <div className="absolute inset-0 z-10 flex items-center justify-center px-4 mt-8">
-                <div className="p-6 sm:p-8 bg-(--background)/75 backdrop-blur-md border border-indigo-500/75 rounded-xl flex flex-col items-center space-y-6 w-full max-w-md shadow-xl shadow-indigo-500/20">
+                  <div className="p-6 sm:p-8 bg-(--background)/75 backdrop-blur-md border border-indigo-500/75 rounded-xl flex flex-col items-center space-y-6 w-full max-w-md shadow-xl shadow-indigo-500/20">
                     <div className="rounded-full p-4 bg-indigo-950 w-fit drop-shadow-sm drop-shadow-indigo-500">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
