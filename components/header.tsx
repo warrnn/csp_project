@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Header() {
     return (
-        <nav className="w-full h-20 border-b border-indigo-500 z-999 fixed">
+        <nav className="w-full h-20 border-b border-indigo-500/75 z-999 fixed">
             <div className="w-full h-full bg-slate-900/50 backdrop-blur-md">
                 <div className="w-full h-full flex justify-between px-4">
                     <Link href="/" className="flex space-x-2 items-center drop-shadow-lg drop-shadow-indigo-500 transition-all hover:drop-shadow-indigo-600 hover:scale-105">

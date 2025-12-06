@@ -1,7 +1,7 @@
 "use client";
 
 import ConcertCard from "../components/ConcertCard";
-import GradientBlinds from "../components/reactbits/GradientBlinds";
+import GradientBlinds from "../components/GradientBlinds";
 
 export default function Home() {
   return (
@@ -35,7 +35,7 @@ export default function Home() {
                   type="text"
                   title="search"
                   placeholder="Search for concerts, artists, or venues..."
-                  className="w-full h-14 px-6 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 shadow-lg"
+                  className="w-full h-14 px-6 rounded-xl bg-(--background)/25 backdrop-blur-xl border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/70 focus:border-indigo-500 shadow-lg"
                 />
               </div>
             </div>
@@ -43,7 +43,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="w-full h-auto py-8 px-16 flex flex-col space-y-8 pb-12">
+      <section className="w-full h-auto p-8 flex flex-col space-y-8 pb-12">
         <div className="flex flex-col space-y-2">
           <h2 className="font-semibold text-xl">Upcoming Concerts</h2>
           <p className="text-gray-400">Discover and book tickets for the hottest events</p>

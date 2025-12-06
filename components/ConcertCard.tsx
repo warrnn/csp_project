@@ -1,6 +1,7 @@
 import { formatRupiah } from "@/lib/helpers/formatHelper";
 import { LinearProgress } from "@mui/material";
 import Link from "next/link";
+import SpotlightCard from "./SpotlightCard";
 
 type ConcertCardProps = {
     id: string;
@@ -17,7 +18,7 @@ type ConcertCardProps = {
 
 export default function ConcertCard({ id, title, image, venue, date, time, location, currentCapacity, maxCapacity, price }: ConcertCardProps) {
     return (
-        <div className="flex flex-col border-2 bg-(--background) border-indigo-500/50 rounded-xl max-w-md overflow-hidden hover:-translate-y-2 hover:shadow-lg hover:shadow-indigo-700/80 transition-all duration-500 group">
+        <SpotlightCard className="flex flex-col border-2 bg-(--background) border-indigo-500/50 rounded-xl max-w-md overflow-hidden hover:-translate-y-2 hover:shadow-lg hover:shadow-indigo-700/80 transition-all duration-500 group">
             <div className="w-full h-56 overflow-hidden">
                 <img
                     src={image}
@@ -55,7 +56,14 @@ export default function ConcertCard({ id, title, image, venue, date, time, locat
                     </div>
                 </div>
                 <div>
-                    <LinearProgress variant="determinate" value={(currentCapacity / maxCapacity) * 100} />
+                    <LinearProgress variant="determinate" value={(currentCapacity / maxCapacity) * 100} sx={{
+                        height: 5,
+                        borderRadius: 5,
+                        backgroundColor: "#374151",
+                        "& .MuiLinearProgress-bar": {
+                            backgroundColor: "#3b82f6",
+                        },
+                    }} />
                 </div>
                 <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 justify-between items-center mt-2">
                     <p className="text-indigo-500 text-2xl font-semibold">{formatRupiah(price)}</p>
@@ -68,6 +76,6 @@ export default function ConcertCard({ id, title, image, venue, date, time, locat
                     </Link>
                 </div>
             </div>
-        </div>
+        </SpotlightCard>
     );
 }

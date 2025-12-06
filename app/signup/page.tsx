@@ -1,6 +1,6 @@
 "use client";
 
-import DarkVeil from "@/components/reactbits/DarVeil";
+import DarkVeil from "@/components/DarVeil";
 import Link from "next/link";
 
 export default function SignUp() {
