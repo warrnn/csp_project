@@ -6,6 +6,7 @@ import axios from "axios";
 import Link from "next/link";
 
 export default function SignIn() {
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -13,11 +14,23 @@ export default function SignIn() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        axios.post('/api/signin', {
+        axios.post('/api/auth/signin', {
             email,
             password
-        }).then(() => {
-            window.location.href = '/';
+        }).then((response) => {
+            const userId = response.data.user_id;
+
+            axios.get(`/api/profiles/${userId}`).then((response) => {
+                const role = response.data.role;
+
+                if (role === 'user') {
+                    window.location.href = '/';
+                } else if (role === 'admin') {
+                    window.location.href = '/admin/manage';
+                }
+            }).catch((error) => {
+                ErrorResponse({ message: error.response.data.error });
+            })
         }).catch((error) => {
             ErrorResponse({ message: error.response.data.error });
         })
@@ -86,7 +99,7 @@ export default function SignIn() {
                         <input
                             type="submit"
                             value="Sign In"
-                            className="bg-indigo-500 hover:bg-indigo-600 transition-all duration-300 py-2 rounded-md cursor-pointer   w-full text-sm sm:text-base font-semibold"
+                            className="bg-indigo-500 hover:bg-indigo-600 transition-all duration-300 py-2 rounded-md cursor-pointer hover:scale-[0.975] w-full text-sm sm:text-base font-semibold"
                         />
                     </form>
 

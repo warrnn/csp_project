@@ -1,10 +1,13 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: Request, context: { params: { id: string } }) {
     try {
         const supabase = await createServerClient();
-        const { data, error } = await supabase.from('profiles').select('*')
+
+        const { id } = await context.params;
+
+        const { data, error } = await supabase.from('profiles').select('*').eq('id', id).single();
 
         if (error) {
             return NextResponse.json({ error: error.message }, { status: 400 })

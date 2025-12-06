@@ -14,7 +14,7 @@ export default function SignUp() {
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        axios.post('/api/signup', {
+        axios.post('/api/auth/signup', {
             fullName: fullName,
             email,
             password
@@ -101,7 +101,7 @@ export default function SignUp() {
                         <input
                             type="submit"
                             value="Sign Up"
-                            className="bg-indigo-500 hover:bg-indigo-600 transition-all duration-300 py-2 rounded-md cursor-pointer w-full text-sm sm:text-base font-semibold"
+                            className="bg-indigo-500 hover:bg-indigo-600 transition-all duration-300 py-2 rounded-md cursor-pointer hover:scale-[0.975] w-full text-sm sm:text-base font-semibold"
                         />
                     </form>
 
