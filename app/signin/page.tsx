@@ -39,7 +39,7 @@ export default function SignIn() {
     return (
         <section className="relative w-full min-h-screen overflow-hidden bg-black">
             <div className="absolute inset-0 z-0">
-                <DarkVeil />
+                <DarkVeil speed={1}/>
             </div>
 
             <div className="absolute inset-0 z-10 flex items-center justify-center px-4 mt-8">
