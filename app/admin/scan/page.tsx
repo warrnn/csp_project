@@ -1,6 +1,6 @@
 "use client"
 
-import DarkVeil from "@/components/reactbits/DarVeil"
+import DarkVeil from "@/components/DarVeil"
 import { IoScan } from "react-icons/io5";
 
 
