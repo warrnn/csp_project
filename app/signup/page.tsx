@@ -2,8 +2,31 @@
 
 import DarkVeil from "@/components/DarVeil";
 import Link from "next/link";
+import axios from 'axios';
+import { ErrorResponse, SuccessResponse } from "@/lib/responseAlert";
 
 export default function SignUp() {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        const fullName = formData.get("fullName") as string;
+        const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+
+        axios.post('/api/signup', {
+            fullName: fullName,
+            email,
+            password
+        }).then((response) => {
+            SuccessResponse({ title: "Success", message: response.data.message }).then(() => {
+                window.location.href = '/signin';
+            });
+        }).catch((error) => {
+            ErrorResponse({ message: error.message });
+        })
+    }
+
     return (
         <section className="relative w-full min-h-screen overflow-hidden bg-black">
             <div className="absolute inset-0 z-0">
@@ -15,7 +38,7 @@ export default function SignUp() {
                     <div className="rounded-full p-4 bg-indigo-950 w-fit drop-shadow-sm drop-shadow-indigo-500">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="32"  
+                            width="32"
                             height="32"
                             fill="currentColor"
                             className="text-indigo-400"
@@ -35,15 +58,16 @@ export default function SignUp() {
                         </p>
                     </div>
 
-                    <form className="w-full flex flex-col space-y-6">
+                    <form onSubmit={handleSubmit} className="w-full flex flex-col space-y-6">
                         <div className="w-full flex flex-col space-y-2">
                             <label htmlFor="name" className="text-sm">
                                 Full Name
                             </label>
                             <input
                                 type="text"
-                                name="name"
-                                placeholder="John Doe"
+                                name="fullName"
+                                placeholder="Your Name"
+                                required
                                 className="border border-indigo-500/50 bg-black/30 py-2 px-3 rounded-md w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
                         </div>
@@ -56,6 +80,7 @@ export default function SignUp() {
                                 type="email"
                                 name="email"
                                 placeholder="you@example.com"
+                                required
                                 className="border border-indigo-500/50 bg-black/30 py-2 px-3 rounded-md w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
                         </div>
@@ -68,6 +93,7 @@ export default function SignUp() {
                                 type="password"
                                 name="password"
                                 placeholder="••••••••"
+                                required
                                 className="border border-indigo-500/50 bg-black/30 py-2 px-3 rounded-md w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
                         </div>

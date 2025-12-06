@@ -1,9 +1,28 @@
 "use client";
 
 import DarkVeil from "@/components/DarVeil";
+import { ErrorResponse } from "@/lib/responseAlert";
+import axios from "axios";
 import Link from "next/link";
 
 export default function SignIn() {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+
+        axios.post('/api/signin', {
+            email,
+            password
+        }).then(() => {
+            window.location.href = '/';
+        }).catch((error) => {
+            ErrorResponse({ message: error.response.data.error });
+        })
+    };
+
     return (
         <section className="relative w-full min-h-screen overflow-hidden bg-black">
             <div className="absolute inset-0 z-0">
@@ -11,7 +30,7 @@ export default function SignIn() {
             </div>
 
             <div className="absolute inset-0 z-10 flex items-center justify-center px-4 mt-8">
-                  <div className="p-6 sm:p-8 bg-(--background)/75 backdrop-blur-md border border-indigo-500/75 rounded-xl flex flex-col items-center space-y-6 w-full max-w-md shadow-xl shadow-indigo-500/20">
+                <div className="p-6 sm:p-8 bg-(--background)/75 backdrop-blur-md border border-indigo-500/75 rounded-xl flex flex-col items-center space-y-6 w-full max-w-md shadow-xl shadow-indigo-500/20">
                     <div className="rounded-full p-4 bg-indigo-950 w-fit drop-shadow-sm drop-shadow-indigo-500">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +56,7 @@ export default function SignIn() {
                         </p>
                     </div>
 
-                    <form className="w-full flex flex-col space-y-6">
+                    <form onSubmit={handleSubmit} className="w-full flex flex-col space-y-6">
                         <div className="w-full flex flex-col space-y-2">
                             <label htmlFor="email" className="text-sm">
                                 Email
@@ -46,6 +65,7 @@ export default function SignIn() {
                                 type="email"
                                 name="email"
                                 placeholder="you@example.com"
+                                required
                                 className="border border-indigo-500/50 bg-black/30 py-2 px-3 rounded-md w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
                         </div>
@@ -58,6 +78,7 @@ export default function SignIn() {
                                 type="password"
                                 name="password"
                                 placeholder="••••••••"
+                                required
                                 className="border border-indigo-500/50 bg-black/30 py-2 px-3 rounded-md w-full text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             />
                         </div>

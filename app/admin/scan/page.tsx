@@ -22,7 +22,7 @@ export default function ScanPage() {
           <div className="mt-6 px-8 py-6 bg-(--background)/75 backdrop-blur-md border border-indigo-500/75 rounded-xl flex flex-col w-[380px] self-center shadow-xl shadow-indigo-500/20">
             <p className="text-white font-medium">QR Code</p>
             <input type="text" placeholder="Enter or scan QR code" className="mt-2 w-full px-4 py-2 border border-indigo-900 rounded-md focus:outline-none focus:border-indigo-500 placeholder:text-sm" />
-            <button className="mt-4 w-full px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 flex items-center justify-center gap-2">
+            <button type="button" className="mt-4 w-full px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 flex items-center justify-center gap-2">
               <IoScan className="text-xl text-white" />
               Scan Ticket
             </button>

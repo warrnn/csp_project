@@ -1,13 +1,27 @@
 "use client";
 
 import GlareHover from "@/components/GlareHover";
+import { useAuth } from "@/contexts/AuthProvider";
 import { formatRupiah } from "@/lib/helpers/formatHelper";
 import { LinearProgress } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function ConcertPage() {
+    const { user, loading } = useAuth();
     const [ticketQuantity, setTicketQuantity] = useState(1);
+
+    const handleTicketQuantityChange = (operation: string) => {
+        if (operation === "increment") {
+            if (ticketQuantity < 10) {
+                setTicketQuantity(ticketQuantity + 1);
+            }
+        } else if (operation === "decrement") {
+            if (ticketQuantity > 1) {
+                setTicketQuantity(ticketQuantity - 1);
+            }
+        }
+    }
 
     return (
         <main className="p-8">
@@ -86,37 +100,65 @@ export default function ConcertPage() {
                             <div className="flex flex-col space-y-3">
                                 <p>Quantity</p>
                                 <div className="flex space-x-4 py-2 items-center">
-                                    <button onClick={() => setTicketQuantity(ticketQuantity + 1)} title="plus" type="button" className="border border-indigo-500/50 rounded-lg p-2.5 cursor-pointer">
+                                    <button onClick={() => handleTicketQuantityChange("increment")} title="plus" type="button" className="border border-indigo-500/50 rounded-lg p-2.5 cursor-pointer">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="text-white" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                                         </svg>
                                     </button>
                                     <p className="text-lg">{ticketQuantity}</p>
-                                    <button onClick={() => setTicketQuantity(ticketQuantity - 1)} title="minus" type="button" className="border border-indigo-500/50 rounded-lg p-2.5 cursor-pointer">
+                                    <button onClick={() => handleTicketQuantityChange("decrement")} title="minus" type="button" className="border border-indigo-500/50 rounded-lg p-2.5 cursor-pointer">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="text-white" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8" />
                                         </svg>
                                     </button>
+                                </div>
+                                <div className="pb-1">
+                                    <p className="text-sm text-gray-400">Maximum 10 tickets per purchase</p>
                                 </div>
                                 <div className="flex justify-between items-center">
                                     <p>Total Amount</p>
                                     <p className="font-semibold text-indigo-500">{formatRupiah(ticketQuantity * 500000)}</p>
                                 </div>
                                 <div>
-                                    <GlareHover
-                                        width="auto"
-                                        height="auto"
-                                        borderColor="transparent"
-                                        glareColor="#ffffff"
-                                        glareOpacity={0.5}
-                                        glareAngle={-30}
-                                        glareSize={300}
-                                        transitionDuration={800}
-                                        playOnce={false}
-                                        className="mt-2 hover:scale-[0.975] transition-all"
-                                    >
-                                        <Link href={"/signin"} title="buy tickets" type="button" className="w-full flex items-center justify-center text-white bg-linear-to-r from-indigo-500 to-pink-500 rounded-xl p-3">Sign In To Purchase</Link>
-                                    </GlareHover>
+                                    {
+                                        user ? (
+                                            <GlareHover
+                                                width="auto"
+                                                height="auto"
+                                                borderColor="transparent"
+                                                glareColor="#ffffff"
+                                                glareOpacity={0.5}
+                                                glareAngle={-30}
+                                                glareSize={300}
+                                                transitionDuration={800}
+                                                playOnce={false}
+                                                className="mt-2 hover:scale-[0.975] transition-all"
+                                            >
+                                                <Link href={"/"} title="buy tickets" type="button" className="w-full flex items-center justify-center space-x-2 text-white bg-linear-to-r from-indigo-500 to-pink-500 rounded-xl p-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                        <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
+                                                    </svg>
+                                                    <span>Purchase Now</span>
+                                                </Link>
+                                            </GlareHover>
+                                        ) : (
+                                            <GlareHover
+                                                width="auto"
+                                                height="auto"
+                                                borderColor="transparent"
+                                                glareColor="#ffffff"
+                                                glareOpacity={0.5}
+                                                glareAngle={-30}
+                                                glareSize={300}
+                                                transitionDuration={800}
+                                                playOnce={false}
+                                                className="mt-2 hover:scale-[0.975] transition-all"
+                                            >
+                                                <Link href={"/signin"} title="sign in to buy" type="button" className="w-full flex items-center justify-center text-white bg-linear-to-r from-indigo-500 to-pink-500 rounded-xl p-3">Sign In To Purchase</Link>
+                                            </GlareHover>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
