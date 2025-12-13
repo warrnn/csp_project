@@ -1,9 +1,12 @@
 "use client";
 
+import { useAuth } from "@/contexts/AuthProvider";
 import ConcertCard from "../components/ConcertCard";
 import GradientBlinds from "../components/GradientBlinds";
 
 export default function Home() {
+  const { user, profile, loading } = useAuth();
+
   return (
     <>
       <section className="relative w-full h-[85vh] overflow-hidden bg-black">
@@ -53,13 +56,15 @@ export default function Home() {
             id="ABCDEF-123456-HIJKLMN"
             title="Justin Bieber Concert"
             image="https://variety.com/wp-content/uploads/2021/01/1294032168.jpg"
+            artist="Justin Bieber"
             venue="The O2 Arena"
             date="23 December 2023"
             time="19:00"
             location="Gelora Bung Karno"
             currentCapacity={1500}
             maxCapacity={3500}
-            price={500000} />
+            price={500000}
+            profile={profile} />
         </div>
       </section>
     </>

@@ -2,11 +2,13 @@ import { formatRupiah } from "@/lib/helpers/formatHelper";
 import { LinearProgress } from "@mui/material";
 import Link from "next/link";
 import SpotlightCard from "./SpotlightCard";
+import { Profile } from "@/contexts/AuthProvider";
 
 type ConcertCardProps = {
     id: string;
     image: string;
     title: string;
+    artist: string;
     venue: string;
     date: string;
     time: string;
@@ -14,9 +16,10 @@ type ConcertCardProps = {
     currentCapacity: number;
     maxCapacity: number;
     price: number;
+    profile: Profile | null;
 };
 
-export default function ConcertCard({ id, title, image, venue, date, time, location, currentCapacity, maxCapacity, price }: ConcertCardProps) {
+export default function ConcertCard({ id, title, image, artist, venue, date, time, location, currentCapacity, maxCapacity, price, profile }: ConcertCardProps) {
     return (
         <SpotlightCard className="flex flex-col border-2 bg-(--background) border-indigo-500/50 rounded-xl max-w-md overflow-hidden hover:-translate-y-2 hover:shadow-lg hover:shadow-indigo-700/80 transition-all duration-500 group">
             <div className="w-full h-56 overflow-hidden">
@@ -30,7 +33,7 @@ export default function ConcertCard({ id, title, image, venue, date, time, locat
             <div className="p-6 flex flex-col space-y-4">
                 <div className="flex flex-col space-y-2">
                     <h1 className="text-lg">{title}</h1>
-                    <p className="text-sm text-gray-500">{venue}</p>
+                    <p className="text-sm text-gray-500">{artist} • {venue}</p>
                 </div>
                 <div className="flex flex-col space-y-2 text-sm">
                     <div className="flex items-center space-x-3">
@@ -72,7 +75,9 @@ export default function ConcertCard({ id, title, image, venue, date, time, locat
                             <path d="M4 4.85v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9zm-7 1.8v.9h1v-.9zm7 0v.9h1v-.9z" />
                             <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3zM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v1.05a2.5 2.5 0 0 0 0 4.9v1.05a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1.05a2.5 2.5 0 0 0 0-4.9z" />
                         </svg>
-                        <p>Buy Ticket</p>
+                        {
+                            profile?.role === "user" ? <p>Buy Ticket</p> : <p>See Details</p>
+                        }
                     </Link>
                 </div>
             </div>

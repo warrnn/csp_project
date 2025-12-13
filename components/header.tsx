@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Header() {
-    const { user, profile, loading } = useAuth();
+const { user, profile, loading } = useAuth();
 
     const handleLogout = async () => {
         axios.post('/api/auth/logout')

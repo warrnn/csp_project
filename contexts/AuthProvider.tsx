@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import axios from "axios";
 
-type Profile = {
+export type Profile = {
     id: string;
     email: string;
     full_name: string;
