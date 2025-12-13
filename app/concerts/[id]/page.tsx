@@ -2,13 +2,20 @@
 
 import GlareHover from "@/components/GlareHover";
 import { useAuth } from "@/contexts/AuthProvider";
-import { formatRupiah } from "@/lib/helpers/formatHelper";
+import { formatDateTimeEnUS, formatRupiah } from "@/lib/helpers/formatHelper";
+import { Concert } from "@/lib/models";
 import { LinearProgress } from "@mui/material";
+import axios from "axios";
 import Link from "next/link";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ConcertPage() {
+    const params = useParams();
+    const id = params.id;
+
     const { user, profile, loading } = useAuth();
+    const [concert, setConcert] = useState<Concert>({} as Concert);
     const [ticketQuantity, setTicketQuantity] = useState(1);
 
     const handleTicketQuantityChange = (operation: string) => {
@@ -22,6 +29,24 @@ export default function ConcertPage() {
             }
         }
     }
+
+    useEffect(() => {
+        if (!id) {
+            return;
+        }
+
+        const fetchConcerts = async () => {
+            try {
+                const response = await axios.get(`/api/concerts/${params.id}`);
+                setConcert(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        fetchConcerts();
+    }, [id]);
 
     return (
         <main className="p-8">
@@ -37,14 +62,14 @@ export default function ConcertPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div className="lg:sticky lg:top-24 h-fit">
                         <img
-                            src="https://variety.com/wp-content/uploads/2021/01/1294032168.jpg"
+                            src={concert.poster_url}
                             alt=""
                             className="border-2 border-indigo-500/50 rounded-xl"
                         />
                     </div>
                     <div className="flex flex-col space-y-2">
-                        <h1 className="text-xl">Justin Bieber Concert</h1>
-                        <h2 className="text-xl text-gray-400">The O2 Arena</h2>
+                        <h1 className="text-xl">{concert.title}</h1>
+                        <h2 className="text-xl text-indigo-500">{concert.artist}</h2>
                         <div className="p-6 mt-4 border border-indigo-500 rounded-xl flex flex-col space-y-3">
                             <div className="flex space-x-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="text-indigo-500 mt-1" viewBox="0 0 16 16">
@@ -54,8 +79,7 @@ export default function ConcertPage() {
                                 </svg>
                                 <div className="text-gray-400 flex flex-col">
                                     <p className="text-sm">Date & Time</p>
-                                    <p className="text-white">Saturday, 23 December 2023</p>
-                                    <p>19:00</p>
+                                    <p className="text-white">{formatDateTimeEnUS(concert.concert_date)}</p>
                                 </div>
                             </div>
                             <div className="flex space-x-3">
@@ -65,7 +89,7 @@ export default function ConcertPage() {
                                 </svg>
                                 <div className="text-gray-400 flex flex-col">
                                     <p className="text-sm">Venue</p>
-                                    <p className="text-white">The O2 Arena, Jakarta, Indonesia</p>
+                                    <p className="text-white">{concert.venue}</p>
                                 </div>
                             </div>
                             <div className="flex space-x-3">
@@ -74,8 +98,8 @@ export default function ConcertPage() {
                                 </svg>
                                 <div className="text-gray-400 flex flex-col w-full">
                                     <p className="text-sm">Availability</p>
-                                    <p className="text-white">2500 of 5000 seats remaining</p>
-                                    <LinearProgress variant="determinate" className="mt-2.5" value={(2500 / 5000) * 100} sx={{
+                                    <p className="text-white">{concert.available_tickets} of {concert.total_tickets} seats remaining</p>
+                                    <LinearProgress variant="determinate" className="mt-2.5" value={(concert.available_tickets / concert.total_tickets) * 100} sx={{
                                         height: 7.5,
                                         borderRadius: 5,
                                         backgroundColor: "#374151",
@@ -88,13 +112,13 @@ export default function ConcertPage() {
                         </div>
                         <div className="p-6 mt-4 border border-indigo-500 rounded-xl flex flex-col space-y-3">
                             <p>About This Event</p>
-                            <p className="text-gray-400">Lorem ipsum dolor, sit amet consectetur adipisicing elit. A magni nobis, nesciunt ducimus commodi culpa rem iure eos? Dolor mollitia eos omnis blanditiis rem doloremque aliquam ea excepturi tempore repellat.</p>
+                            <p className="text-gray-400">{concert.description}</p>
                         </div>
                         <div className="p-6 mt-4 border border-indigo-500 rounded-xl flex flex-col space-y-3">
                             <p>Purchase Tickets</p>
                             <div className="flex justify-between">
                                 <p className="text-gray-400">Ticket Price</p>
-                                <p className="font-semibold text-indigo-500">Rp 500.000</p>
+                                <p className="font-semibold text-indigo-500">{formatRupiah(concert.price)}</p>
                             </div>
                             {
                                 user ? (

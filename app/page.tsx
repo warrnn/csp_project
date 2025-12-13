@@ -3,9 +3,26 @@
 import { useAuth } from "@/contexts/AuthProvider";
 import ConcertCard from "../components/ConcertCard";
 import GradientBlinds from "../components/GradientBlinds";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Concert } from "@/lib/models";
 
 export default function Home() {
   const { user, profile, loading } = useAuth();
+  const [concerts, setConcerts] = useState<Concert[]>([]);
+
+  useEffect(() => {
+    const fetchConcerts = async () => {
+      try {
+        const response = await axios.get("/api/concerts");
+        setConcerts(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchConcerts();
+  }, []);
 
   return (
     <>
@@ -52,19 +69,22 @@ export default function Home() {
           <p className="text-gray-400">Discover and book tickets for the hottest events</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <ConcertCard
-            id="ABCDEF-123456-HIJKLMN"
-            title="Justin Bieber Concert"
-            image="https://variety.com/wp-content/uploads/2021/01/1294032168.jpg"
-            artist="Justin Bieber"
-            venue="The O2 Arena"
-            date="23 December 2023"
-            time="19:00"
-            location="Gelora Bung Karno"
-            currentCapacity={1500}
-            maxCapacity={3500}
-            price={500000}
-            profile={profile} />
+          {concerts.map((concert) => (
+            <ConcertCard
+              key={concert.id}
+              id={concert.id!}
+              title={concert.title}
+              artist={concert.artist}
+              description={concert.description}
+              venue={concert.venue}
+              concert_date={concert.concert_date}
+              poster_url={concert.poster_url}
+              price={concert.price}
+              maxCapacity={concert.total_tickets}
+              currentCapacity={concert.available_tickets}
+              profile={profile}
+            />
+          ))}
         </div>
       </section>
     </>

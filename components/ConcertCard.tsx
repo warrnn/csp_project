@@ -1,4 +1,4 @@
-import { formatRupiah } from "@/lib/helpers/formatHelper";
+import { formatDateTimeEnUS, formatRupiah } from "@/lib/helpers/formatHelper";
 import { LinearProgress } from "@mui/material";
 import Link from "next/link";
 import SpotlightCard from "./SpotlightCard";
@@ -6,26 +6,25 @@ import { Profile } from "@/contexts/AuthProvider";
 
 type ConcertCardProps = {
     id: string;
-    image: string;
+    poster_url: string;
     title: string;
     artist: string;
     venue: string;
-    date: string;
-    time: string;
-    location: string;
+    concert_date: string;
+    description: string;
     currentCapacity: number;
     maxCapacity: number;
     price: number;
     profile: Profile | null;
 };
 
-export default function ConcertCard({ id, title, image, artist, venue, date, time, location, currentCapacity, maxCapacity, price, profile }: ConcertCardProps) {
+export default function ConcertCard({ id, title, poster_url, artist, venue, concert_date, currentCapacity, maxCapacity, price, profile }: ConcertCardProps) {
     return (
         <SpotlightCard className="flex flex-col border-2 bg-(--background) border-indigo-500/50 rounded-xl max-w-md overflow-hidden hover:-translate-y-2 hover:shadow-lg hover:shadow-indigo-700/80 transition-all duration-500 group">
             <div className="w-full h-56 overflow-hidden">
                 <img
-                    src={image}
-                    alt="concert"
+                    src={poster_url}
+                    alt={title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
             </div>
@@ -33,7 +32,7 @@ export default function ConcertCard({ id, title, image, artist, venue, date, tim
             <div className="p-6 flex flex-col space-y-4">
                 <div className="flex flex-col space-y-2">
                     <h1 className="text-lg">{title}</h1>
-                    <p className="text-sm text-gray-500">{artist} • {venue}</p>
+                    <p className="text-sm text-indigo-500">{artist}</p>
                 </div>
                 <div className="flex flex-col space-y-2 text-sm">
                     <div className="flex items-center space-x-3">
@@ -42,14 +41,14 @@ export default function ConcertCard({ id, title, image, artist, venue, date, tim
                             <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" />
                             <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5z" />
                         </svg>
-                        <p className="text-gray-400">{date} • {time}</p>
+                        <p className="text-gray-400">{formatDateTimeEnUS(concert_date)}</p>
                     </div>
                     <div className="flex items-center space-x-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="text-indigo-500" viewBox="0 0 16 16">
                             <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10" />
                             <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                         </svg>
-                        <p className="text-gray-400">{location}</p>
+                        <p className="text-gray-400">{venue}</p>
                     </div>
                     <div className="flex items-center space-x-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="text-indigo-500" viewBox="0 0 16 16">

@@ -1,42 +1,52 @@
 "use client"
 
+import { Concert } from "@/lib/models";
 import { useReactTable, getCoreRowModel, flexRender, ColumnDef } from "@tanstack/react-table";
+import axios from "axios";
 import Link from "next/link";
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { HiPencil, HiTrash, HiOutlineCalendar, HiOutlineUsers } from "react-icons/hi";
 
-// ini dummy data ya ges
-type Concert = {
-  concert: string;
-  artist: string;
-  date: string;
-  venue: string;
-  quota: { current: number; total: number };
-  price: string;
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("id-ID", {
+    day: "numeric", month: "short", year: "numeric"
+  });
+};
+
+const formatCurrency = (amount: string) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0
+  }).format(Number(amount));
 };
 
 export default function DashboardPage() {
-  const data: Concert[] = useMemo(
-    () => [
-      {
-        concert: "Justin Bieber Concert",
-        artist: "Justin Bieber",
-        date: "2023-12-01",
-        venue: "O2 Arena",
-        quota: { current: 2500, total: 5000 },
-        price: "Rp 500.000 ",
-      },
-    ],
-    []
-  )
+  const [concerts, setConcerts] = useState<Concert[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchConcerts = async () => {
+      try {
+        const response = await axios.get("/api/concerts");
+        setConcerts(response.data);
+      } catch (error) {
+        console.error("Gagal mengambil data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchConcerts();
+  }, []);
 
   const columns = useMemo<ColumnDef<Concert>[]>(
     () => [
       {
-        accessorKey: "concert",
+        accessorKey: "title",
         header: "Concert",
         cell: info => (
-          <span className="text-white">{info.getValue<string>()}</span>
+          <span className="text-white font-medium">{info.getValue<string>()}</span>
         ),
       },
       {
@@ -47,12 +57,12 @@ export default function DashboardPage() {
         ),
       },
       {
-        accessorKey: "date",
+        accessorKey: "concert_date",
         header: "Date",
         cell: info => (
           <span className="flex items-center gap-2">
             <HiOutlineCalendar className="w-5 h-5 text-indigo-500" />
-            <span className="text-white">{info.getValue<string>()}</span>
+            <span className="text-white">{formatDate(info.getValue<string>())}</span>
           </span>
         ),
       },
@@ -64,20 +74,25 @@ export default function DashboardPage() {
         ),
       },
       {
-        accessorKey: "quota",
+        id: "quota",
         header: "Quota",
-        cell: info => {
-          const quota = info.getValue<{ current: number; total: number }>()
-          const percent = (quota.current / quota.total) * 100
+        cell: ({ row }) => {
+          const total = row.original.total_tickets;
+          const available = row.original.available_tickets;
+          const sold = total - available;
+          const percent = total > 0 ? (sold / total) * 100 : 0;
+
           return (
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-sm">
                 <HiOutlineUsers className="w-5 h-5 text-gray-400" />
-                <span className="text-white">{quota.current}/{quota.total}</span>
+                <span className="text-white">
+                  {sold} <span className="text-gray-500">/ {total} Sold</span>
+                </span>
               </div>
-              <div className="w-24 h-2 bg-gray-700 rounded mt-1">
+              <div className="w-24 h-2 bg-gray-700 rounded mt-1 overflow-hidden">
                 <div
-                  className="h-2 bg-indigo-500 rounded"
+                  className="h-full bg-indigo-500 rounded transition-all duration-500"
                   style={{ width: `${percent}%` }}
                 />
               </div>
@@ -89,7 +104,7 @@ export default function DashboardPage() {
         accessorKey: "price",
         header: "Price",
         cell: info => (
-          <span className="text-white">{info.getValue<string>()}</span>
+          <span className="text-white">{formatCurrency(info.getValue<string>())}</span>
         ),
       },
       {
@@ -97,11 +112,11 @@ export default function DashboardPage() {
         header: "Actions",
         cell: () => (
           <div className="flex gap-2">
-            <button title="Edit" className="p-2 rounded hover:bg-indigo-600 transition cursor-pointer">
-              <HiPencil className="w-5 h-5 text-indigo-400" />
+            <button title="Edit" className="p-2 rounded hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 transition cursor-pointer">
+              <HiPencil className="w-5 h-5" />
             </button>
-            <button title="Delete" className="p-2 rounded hover:bg-red-600 transition cursor-pointer">
-              <HiTrash className="w-5 h-5 text-red-400" />
+            <button title="Delete" className="p-2 rounded hover:bg-red-600/20 text-red-400 hover:text-red-300 transition cursor-pointer">
+              <HiTrash className="w-5 h-5" />
             </button>
           </div>
         ),
@@ -111,52 +126,67 @@ export default function DashboardPage() {
   )
 
   const table = useReactTable<Concert>({
-    data,
+    data: concerts,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden">
+    <section className="relative w-full min-h-screen overflow-hidden bg-gray-950">
       <div className="absolute inset-0 z-10 flex flex-col mt-20 py-8 px-16">
-        <div className="flex w-full justify-between">
-          <div className="flex flex-col w-1/2">
-            <p className="text-white text-2xl font-medium">Concert Management</p>
-            <p className="text-gray-500 text-lg font-light">Manage all concerts and events</p>
+        <div className="flex w-full justify-between items-end">
+          <div className="flex flex-col">
+            <h1 className="text-white text-3xl font-bold tracking-tight">Concert Management</h1>
+            <p className="text-gray-400 text-lg font-light mt-1">Manage all concerts and events</p>
           </div>
-          <div className="flex justify-end w-1/2">
+          <div className="flex justify-end">
             <Link href={"manage/add"}
-              className="px-4 py-2 flex items-center rounded-lg text-white font-semibold bg-linear-to-r from-indigo-700 via-indigo-600 to-indigo-500 shadow-md transition hover:bg-indigo-600"
+              className="px-4 py-2 flex items-center rounded-lg text-white font-semibold bg-linear-to-r from-indigo-700 via-indigo-600 to-indigo-500 shadow-lg shadow-indigo-500/20 transition hover:scale-105 active:scale-95"
             >
               Add Concert
             </Link>
           </div>
         </div>
-        <div className="mt-8 bg-gray-900 rounded-lg shadow-lg p-6">
-          <table className="min-w-full">
-            <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id} className="px-4 py-2 text-left text-gray-300 font-semibold">
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map(row => (
-                <tr key={row.id} className="border-t border-gray-800">
-                  {row.getVisibleCells().map(cell => (
-                    <td key={cell.id} className="px-4 py-3">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+
+        <div className="mt-8 bg-gray-900 border border-gray-800 rounded-xl shadow-xl p-6 overflow-x-auto">
+          {isLoading ? (
+            <div className="text-center py-10 text-gray-400 animate-pulse">
+              Loading data...
+            </div>
+          ) : (
+            <table className="min-w-full">
+              <thead>
+                {table.getHeaderGroups().map(headerGroup => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map(header => (
+                      <th key={header.id} className="px-4 py-3 text-left text-xs uppercase tracking-wider text-gray-400 font-semibold border-b border-gray-800">
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody className="divide-y divide-gray-800">
+                {table.getRowModel().rows.length > 0 ? (
+                  table.getRowModel().rows.map(row => (
+                    <tr key={row.id} className="hover:bg-gray-800/50 transition-colors">
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id} className="px-4 py-4 whitespace-nowrap">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
+                      ))}
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={columns.length} className="text-center py-8 text-gray-500">
+                      No concerts found.
                     </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </section>
