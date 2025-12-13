@@ -1,29 +1,38 @@
 "use client"
 
+import { formatRupiah, formatShortDateTimeEnUS } from "@/lib/helpers/formatHelper";
 import { Concert } from "@/lib/models";
 import { useReactTable, getCoreRowModel, flexRender, ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react"
 import { HiPencil, HiTrash, HiOutlineCalendar, HiOutlineUsers } from "react-icons/hi";
-
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("id-ID", {
-    day: "numeric", month: "short", year: "numeric"
-  });
-};
-
-const formatCurrency = (amount: string) => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0
-  }).format(Number(amount));
-};
+import Swal from "sweetalert2";
 
 export default function DashboardPage() {
   const [concerts, setConcerts] = useState<Concert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleDelete = async (id: string) => {
+    try {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await axios.delete(`/api/concerts/${id}`);
+          setConcerts((prevData) => prevData.filter((concert) => concert.id !== id));
+        } else {
+          return
+        }
+      })  
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     const fetchConcerts = async () => {
@@ -31,7 +40,7 @@ export default function DashboardPage() {
         const response = await axios.get("/api/concerts");
         setConcerts(response.data);
       } catch (error) {
-        console.error("Gagal mengambil data:", error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -62,7 +71,7 @@ export default function DashboardPage() {
         cell: info => (
           <span className="flex items-center gap-2">
             <HiOutlineCalendar className="w-5 h-5 text-indigo-500" />
-            <span className="text-white">{formatDate(info.getValue<string>())}</span>
+            <span className="text-white">{formatShortDateTimeEnUS(info.getValue<string>())}</span>
           </span>
         ),
       },
@@ -104,18 +113,18 @@ export default function DashboardPage() {
         accessorKey: "price",
         header: "Price",
         cell: info => (
-          <span className="text-white">{formatCurrency(info.getValue<string>())}</span>
+          <span className="text-white">{formatRupiah(info.getValue<number>())}</span>
         ),
       },
       {
         id: "actions",
         header: "Actions",
-        cell: () => (
+        cell: ({ row }) => (
           <div className="flex gap-2">
             <button title="Edit" className="p-2 rounded hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 transition cursor-pointer">
               <HiPencil className="w-5 h-5" />
             </button>
-            <button title="Delete" className="p-2 rounded hover:bg-red-600/20 text-red-400 hover:text-red-300 transition cursor-pointer">
+            <button onClick={() => handleDelete(row.original.id as string)} title="Delete" className="p-2 rounded hover:bg-red-600/20 text-red-400 hover:text-red-300 transition cursor-pointer">
               <HiTrash className="w-5 h-5" />
             </button>
           </div>
