@@ -69,22 +69,28 @@ export default function Home() {
           <p className="text-gray-400">Discover and book tickets for the hottest events</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {concerts.map((concert) => (
-            <ConcertCard
-              key={concert.id}
-              id={concert.id!}
-              title={concert.title}
-              artist={concert.artist}
-              description={concert.description}
-              venue={concert.venue}
-              concert_date={concert.concert_date}
-              poster_url={concert.poster_url}
-              price={concert.price}
-              maxCapacity={concert.total_tickets}
-              currentCapacity={concert.available_tickets}
-              profile={profile}
-            />
-          ))}
+          {
+            concerts.length === 0 ? (
+              <div className="col-span-3 flex p-16 justify-center text-center items-center">
+                <p className="text-gray-400">No concerts found</p>
+              </div>
+            ) : concerts.map((concert) => (
+              <ConcertCard
+                key={concert.id}
+                id={concert.id!}
+                title={concert.title}
+                artist={concert.artist}
+                description={concert.description}
+                venue={concert.venue}
+                concert_date={concert.concert_date}
+                poster_url={concert.poster_url}
+                price={concert.price}
+                maxCapacity={concert.total_tickets}
+                currentCapacity={concert.available_tickets}
+                profile={profile}
+              />
+            ))
+          }
         </div>
       </section>
     </>

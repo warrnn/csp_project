@@ -60,11 +60,11 @@ export default function ConcertPage() {
             </section>
             <section className="w-full h-auto py-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="lg:sticky lg:top-24 h-fit">
+                    <div className="lg:sticky lg:top-24 h-full">
                         <img
                             src={concert.poster_url}
-                            alt=""
-                            className="border-2 border-indigo-500/50 rounded-xl"
+                            alt={concert.title}
+                            className="border-2 border-indigo-500/50 rounded-xl w-full"
                         />
                     </div>
                     <div className="flex flex-col space-y-2">
@@ -99,14 +99,20 @@ export default function ConcertPage() {
                                 <div className="text-gray-400 flex flex-col w-full">
                                     <p className="text-sm">Availability</p>
                                     <p className="text-white">{concert.available_tickets} of {concert.total_tickets} seats remaining</p>
-                                    <LinearProgress variant="determinate" className="mt-2.5" value={(concert.available_tickets / concert.total_tickets) * 100} sx={{
-                                        height: 7.5,
-                                        borderRadius: 5,
-                                        backgroundColor: "#374151",
-                                        "& .MuiLinearProgress-bar": {
-                                            backgroundColor: "#3b82f6",
-                                        },
-                                    }} />
+                                    {
+                                        concert.available_tickets === 0 ? (
+                                            <p className="text-red-400">Sold Out</p>
+                                        ) : (
+                                            <LinearProgress variant="determinate" className="mt-2.5" value={(concert.available_tickets / concert.total_tickets) * 100} sx={{
+                                                height: 7.5,
+                                                borderRadius: 5,
+                                                backgroundColor: "#374151",
+                                                "& .MuiLinearProgress-bar": {
+                                                    backgroundColor: "#3b82f6",
+                                                },
+                                            }} />
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -145,7 +151,7 @@ export default function ConcertPage() {
                                                 </div>
                                                 <div className="flex justify-between items-center">
                                                     <p>Total Amount</p>
-                                                    <p className="font-semibold text-indigo-500">{formatRupiah(ticketQuantity * 500000)}</p>
+                                                    <p className="font-semibold text-indigo-500">{formatRupiah(ticketQuantity * concert.price)}</p>
                                                 </div>
                                                 <div>
                                                     <GlareHover
@@ -160,16 +166,30 @@ export default function ConcertPage() {
                                                         playOnce={false}
                                                         className="mt-2 hover:scale-[0.975] transition-all"
                                                     >
-                                                        <Link href={"/"} title="buy tickets" type="button" className="w-full flex items-center justify-center space-x-2 text-white bg-linear-to-r from-indigo-500 to-pink-500 rounded-xl p-3">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                                                <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
-                                                            </svg>
-                                                            <span>Purchase Now</span>
-                                                        </Link>
+                                                        {concert.available_tickets === 0 ? (
+                                                            <button
+                                                                disabled
+                                                                className="w-full flex items-center justify-center space-x-2 text-white bg-gray-500 cursor-not-allowed rounded-xl p-3"
+                                                            >
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                                    <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
+                                                                </svg>
+                                                                <span>Sold Out</span>
+                                                            </button>
+                                                        ) : (
+                                                            <Link
+                                                                href="/"
+                                                                className="w-full flex items-center justify-center space-x-2 text-white bg-linear-to-r from-indigo-500 to-pink-500 rounded-xl p-3"
+                                                            >
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                                    <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
+                                                                </svg>
+                                                                <span>Purchase Now</span>
+                                                            </Link>
+                                                        )}
                                                     </GlareHover>
-
-
                                                 </div>
                                             </div>
 
@@ -198,7 +218,7 @@ export default function ConcertPage() {
                                             </div>
                                             <div className="flex justify-between items-center">
                                                 <p>Total Amount</p>
-                                                <p className="font-semibold text-indigo-500">{formatRupiah(ticketQuantity * 500000)}</p>
+                                                <p className="font-semibold text-indigo-500">{formatRupiah(ticketQuantity * concert.price)}</p>
                                             </div>
                                             <div>
                                                 <GlareHover

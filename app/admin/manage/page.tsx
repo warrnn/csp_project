@@ -28,7 +28,7 @@ export default function DashboardPage() {
         } else {
           return
         }
-      })  
+      })
     } catch (error) {
       console.error(error);
     }
@@ -94,12 +94,12 @@ export default function DashboardPage() {
           return (
             <div>
               <div className="flex items-center gap-2 text-sm">
-                <HiOutlineUsers className="w-5 h-5 text-gray-400" />
+                <HiOutlineUsers className="w-4 h-4 text-gray-400" />
                 <span className="text-white">
                   {sold} <span className="text-gray-500">/ {total} Sold</span>
                 </span>
               </div>
-              <div className="w-24 h-2 bg-gray-700 rounded mt-1 overflow-hidden">
+              <div className="w-full h-2 bg-gray-700 rounded mt-1 overflow-hidden">
                 <div
                   className="h-full bg-indigo-500 rounded transition-all duration-500"
                   style={{ width: `${percent}%` }}

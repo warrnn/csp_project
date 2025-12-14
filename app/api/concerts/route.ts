@@ -41,9 +41,10 @@ export async function POST(request: Request) {
         const total_tickets = formData.get("total_tickets") as string;
 
         let posterUrl = "";
+        let fileName = "";
 
         if (posterFile) {
-            const fileName = `${Date.now()}-${posterFile.name.replaceAll(" ", "_")}`;
+            fileName = `${Date.now()}-${posterFile.name.replaceAll(" ", "_")}`;
 
             const { error: uploadError } = await supabase.storage
                 .from("images")
@@ -78,6 +79,7 @@ export async function POST(request: Request) {
                     total_tickets: Number(total_tickets),
                     available_tickets: Number(total_tickets),
                     created_by: user.id,
+                    file_name: `posters/${fileName}`,
                 },
             ])
             .select()
