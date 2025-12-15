@@ -11,3 +11,13 @@
   font-family: 'Inter', sans-serif;
   /*border: 1px solid red*/
 }
+
+::-webkit-scrollbar-thumb {
+  border-radius: 12px;
+  background-color: rgb(97, 95, 255);
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+  background-color: var(--background);
+}

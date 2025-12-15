@@ -20,7 +20,9 @@ export default function DashboardPage() {
         text: "You won't be able to revert this!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes, delete it!',
+        color: '#fff',
+        background: '#0a0a14',
       }).then(async (result) => {
         if (result.isConfirmed) {
           await axios.delete(`/api/concerts/${id}`);

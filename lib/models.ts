@@ -10,3 +10,11 @@ export type Concert = {
     total_tickets: number,
     available_tickets: number
 }
+
+export type Ticket = {
+    id: string,
+    concerts: Concert,
+    is_validated: boolean,
+    validated_at: string,
+    quantity: number
+}

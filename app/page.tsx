@@ -9,12 +9,24 @@ import { Concert } from "@/lib/models";
 
 export default function Home() {
   const { user, profile, loading } = useAuth();
+  const [initialConcerts, setInitialConcerts] = useState<Concert[]>([]);
   const [concerts, setConcerts] = useState<Concert[]>([]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.toLowerCase();
+
+    const filteredConcerts = initialConcerts.filter((concert) =>
+      concert.title.toLowerCase().includes(query) || concert.artist.toLowerCase().includes(query) || concert.venue.toLowerCase().includes(query)
+    );
+
+    setConcerts(filteredConcerts);
+  }
 
   useEffect(() => {
     const fetchConcerts = async () => {
       try {
         const response = await axios.get("/api/concerts");
+        setInitialConcerts(response.data);
         setConcerts(response.data);
       } catch (error) {
         console.error(error);
@@ -52,6 +64,7 @@ export default function Home() {
             <div className="pt-4 px-4 w-full max-w-3xl mx-auto pointer-events-auto">
               <div className="relative">
                 <input
+                  onChange={handleSearch}
                   type="text"
                   title="search"
                   placeholder="Search for concerts, artists, or venues..."
@@ -68,7 +81,7 @@ export default function Home() {
           <h2 className="font-semibold text-xl">Upcoming Concerts</h2>
           <p className="text-gray-400">Discover and book tickets for the hottest events</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
           {
             concerts.length === 0 ? (
               <div className="col-span-3 flex p-16 justify-center text-center items-center">

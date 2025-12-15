@@ -4,11 +4,13 @@ import GlareHover from "@/components/GlareHover";
 import { useAuth } from "@/contexts/AuthProvider";
 import { formatDateTimeEnUS, formatRupiah } from "@/lib/helpers/formatHelper";
 import { Concert } from "@/lib/models";
+import { ErrorResponse } from "@/lib/responseAlert";
 import { LinearProgress } from "@mui/material";
 import axios from "axios";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 export default function ConcertPage() {
     const params = useParams();
@@ -28,6 +30,49 @@ export default function ConcertPage() {
                 setTicketQuantity(ticketQuantity - 1);
             }
         }
+    }
+
+    const buyTicket = async () => {
+        await axios.post('/api/tickets', {
+            concert_id: concert.id,
+            quantity: ticketQuantity
+        }).then((response) => {
+            Swal.fire({
+                title: 'Ticket Purchased',
+                text: `Your tickets for ${concert.title} have been purchased successfully.`,
+                icon: 'success',
+                showDenyButton: true,
+                confirmButtonText: 'View Ticket',
+                denyButtonText: `Back to Concert Page`,
+                color: '#fff',
+                background: '#0a0a14',
+                denyButtonColor: '#6b7280'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/tickets';
+                } else {
+                    window.location.href = `/`;
+                }
+            })
+        }).catch((error) => {
+            ErrorResponse({ message: error.response.data.error });
+        })
+    }
+
+    const handlePurchase = async () => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to purchase ${ticketQuantity} tickets for ${concert.title}.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Buy Now',
+            color: '#fff',
+            background: '#0a0a14',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                buyTicket();
+            }
+        })
     }
 
     useEffect(() => {
@@ -178,16 +223,17 @@ export default function ConcertPage() {
                                                                 <span>Sold Out</span>
                                                             </button>
                                                         ) : (
-                                                            <Link
-                                                                href="/"
-                                                                className="w-full flex items-center justify-center space-x-2 text-white bg-linear-to-r from-indigo-500 to-pink-500 rounded-xl p-3"
+                                                            <button
+                                                                onClick={handlePurchase}
+                                                                title="Purchase Button"
+                                                                className="cursor-pointer w-full flex items-center justify-center space-x-2 text-white bg-linear-to-r from-indigo-500 to-pink-500 rounded-xl p-3"
                                                             >
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                                                     <path d="m10.97 4.97-.02.022-3.473 4.425-2.093-2.094a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05" />
                                                                 </svg>
                                                                 <span>Purchase Now</span>
-                                                            </Link>
+                                                            </button>
                                                         )}
                                                     </GlareHover>
                                                 </div>

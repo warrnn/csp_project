@@ -1,5 +1,6 @@
 "use client";
 
+import { ErrorResponse } from '@/lib/responseAlert';
 import axios from 'axios';
 import { useState, ChangeEvent, FormEvent } from 'react';
 import Swal from 'sweetalert2';
@@ -48,11 +49,7 @@ export default function AddConcert() {
 
             if (selectedFile) data.append('poster', selectedFile);
             else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Please upload a poster for the concert.",
-                })
+                ErrorResponse({ message: "Please upload a poster for the concert." });
                 setIsLoading(false);
                 return;
             }
@@ -76,11 +73,7 @@ export default function AddConcert() {
             window.location.href = "/admin/manage";
         } catch (error) {
             console.error("Error:", error);
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "An error occurred while adding the concert.",
-            })
+            ErrorResponse({ message: "An error occurred while adding the concert." });
         } finally {
             setIsLoading(false);
         }
