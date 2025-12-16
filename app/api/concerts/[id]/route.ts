@@ -1,11 +1,11 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
-type params = {
+type Params = {
     id: string
 }
 
-export async function GET(request: Request, context: { params: params }) {
+export async function GET(request: Request, context: { params: Promise<Params> }) {
     try {
         const supabase = await createServerClient();
 
@@ -23,7 +23,7 @@ export async function GET(request: Request, context: { params: params }) {
     }
 }
 
-export async function DELETE(request: Request, context: { params: params }) {
+export async function DELETE(request: Request, context: { params: Promise<Params> }) {
     try {
         const supabase = await createServerClient();
 

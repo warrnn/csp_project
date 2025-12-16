@@ -5,7 +5,7 @@ type Params = {
     id: string;
 };
 
-export async function GET(request: Request, context: { params: Params }) {
+export async function GET(request: Request, context: { params: Promise<Params> }) {
     try {
         const supabase = await createServerClient();
 

@@ -5,7 +5,7 @@ type Params = {
     id: string;
 };
 
-export async function GET(request: Request, context: { params: Params }) {
+export async function GET(request: Request, context: { params: Promise<Params> }) {
     const supabase = await createServerClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -24,7 +24,7 @@ export async function GET(request: Request, context: { params: Params }) {
     return NextResponse.json(data, { status: 200 });
 }
 
-export async function PUT(request: Request, context: { params: Params }) {
+export async function PUT(request: Request, context: { params: Promise<Params> }) {
     const supabase = await createServerClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
