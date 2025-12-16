@@ -7,11 +7,21 @@ import axios from "axios";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react"
 import { HiPencil, HiTrash, HiOutlineCalendar, HiOutlineUsers } from "react-icons/hi";
+
 import Swal from "sweetalert2";
 
 export default function DashboardPage() {
   const [concerts, setConcerts] = useState<Concert[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
+
+  const handleEdit = (concert: Concert) => {
+    setSelectedConcert(concert);
+  };
+
+  const handleUpdateSuccess = (updatedConcert: Concert) => {
+      setConcerts(prev => prev.map(c => c.id === updatedConcert.id ? updatedConcert : c));
+  };
 
   const handleDelete = async (id: string) => {
     try {
@@ -123,9 +133,9 @@ export default function DashboardPage() {
         header: "Actions",
         cell: ({ row }) => (
           <div className="flex gap-2">
-            <button title="Edit" className="p-2 rounded hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 transition cursor-pointer">
+            <Link href={`manage/edit/${row.original.id}`} title="Edit" className="p-2 rounded hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 transition cursor-pointer">
               <HiPencil className="w-5 h-5" />
-            </button>
+            </Link>
             <button onClick={() => handleDelete(row.original.id as string)} title="Delete" className="p-2 rounded hover:bg-red-600/20 text-red-400 hover:text-red-300 transition cursor-pointer">
               <HiTrash className="w-5 h-5" />
             </button>
@@ -133,7 +143,7 @@ export default function DashboardPage() {
         ),
       },
     ],
-    []
+    [handleDelete]
   )
 
   const table = useReactTable<Concert>({
