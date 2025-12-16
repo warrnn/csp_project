@@ -9,7 +9,7 @@ export default function RootLayout({
 }>) {
     const { profile } = useAuth();
 
-    if (profile?.role != 'admin') {
+    if (profile?.role != 'user') {
         return (
             <section className="w-full min-h-screen flex flex-col items-center justify-center">
                 <h1 className="text-3xl font-semibold text-gray-400">Access Denied</h1>

@@ -31,7 +31,7 @@ export default function ConcertCard({ id, title, poster_url, artist, venue, conc
 
             <div className="p-6 flex flex-col space-y-4">
                 <div className="flex flex-col space-y-2">
-                    <h1 className="text-lg">{title}</h1>
+                    <h1 className="text-lg line-clamp-1">{title}</h1>
                     <p className="text-sm text-indigo-500">{artist}</p>
                 </div>
                 <div className="flex flex-col space-y-2 text-sm">
