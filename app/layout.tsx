@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TicketWave",
+  title: "TicketWaves",
   description: "Discover amazing concerts, book tickets instantly, and create unforgettable memories",
 };
 

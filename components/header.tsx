@@ -114,8 +114,8 @@ export default function Header() {
             <div className="w-full h-full bg-slate-900/50 backdrop-blur-md relative">
                 <div className="w-full h-full flex justify-between items-center px-4">
                     <Link href="/" className="flex space-x-2 items-center drop-shadow-lg drop-shadow-indigo-500 transition-all hover:drop-shadow-indigo-600 hover:scale-105 z-50">
-                        <Image src="/assets/images/ticketwave.png" alt="ticketwave" width={75} height={0} />
-                        <h1 className="text-xl font-bold text-white">TicketWave</h1>
+                        <Image src="/assets/images/ticketwave.png" alt="ticketwaves" width={75} height={0} />
+                        <h1 className="text-xl font-bold text-white">TicketWaves</h1>
                     </Link>
 
                     <div className="hidden min-[860px]:flex h-full items-center">

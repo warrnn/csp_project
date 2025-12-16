@@ -54,7 +54,7 @@ export default function SignUp() {
                             Create Account
                         </h1>
                         <p className="text-sm sm:text-base text-gray-400">
-                            Join TicketWave and start exploring concerts
+                            Join TicketWaves and start exploring concerts
                         </p>
                     </div>
 
