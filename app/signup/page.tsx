@@ -28,12 +28,11 @@ export default function SignUp() {
     }
 
     return (
-        <section className="relative w-full min-h-screen overflow-hidden bg-black">
+        <section className="relative w-full min-h-screen bg-black flex items-center justify-center">
             <div className="absolute inset-0 z-0">
                 <DarkVeil speed={1} />
             </div>
-
-            <div className="absolute inset-0 z-10 flex items-center justify-center px-4 mt-16">
+            <div className="relative z-10 w-full px-4 py-10 flex items-center justify-center mt-16">
                 <div className="p-6 sm:p-8 bg-(--background)/75 backdrop-blur-md border border-indigo-500/75 rounded-xl flex flex-col items-center space-y-6 w-full max-w-md shadow-xl shadow-indigo-500/20">
                     <div className="rounded-full p-4 bg-indigo-950 w-fit drop-shadow-sm drop-shadow-indigo-500">
                         <svg
