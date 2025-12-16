@@ -104,8 +104,8 @@ export default function ConcertPage() {
                 </div>
             </section>
             <section className="w-full h-auto py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="lg:sticky lg:top-24 h-full">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <div className="lg:sticky lg:top-24">
                         <img
                             src={concert.poster_url}
                             alt={concert.title}

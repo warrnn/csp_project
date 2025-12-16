@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 export default function TicketsPage() {
     const [showValidated, setShowValidated] = useState(false);
     const [tickets, setTickets] = useState<Ticket[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchTickets = async () => {
@@ -16,6 +17,8 @@ export default function TicketsPage() {
                 setTickets(response.data);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -53,22 +56,23 @@ export default function TicketsPage() {
 
             <div className="mt-8 pb-16 flex flex-col gap-4">
                 {
-                    filteredTickets.length === 0 ? <p className="text-center text-gray-400 p-8">No tickets found</p> :
-                        filteredTickets
-                            .filter(ticket => ticket.concerts) // safety
-                            .map(ticket => (
-                                <TicketCard
-                                    key={ticket.id}
-                                    id={ticket.id}
-                                    title={ticket.concerts!.title}
-                                    artist={ticket.concerts!.artist}
-                                    datetime={ticket.concerts!.concert_date}
-                                    venue={ticket.concerts!.venue}
-                                    quantity={ticket.quantity}
-                                    image={ticket.concerts!.poster_url}
-                                    isValidated={ticket.is_validated}
-                                />
-                            ))
+                    isLoading ? <div className="size-16 rounded-full border-b-2 border-indigo-500 animate-spin self-center mt-16"></div> :
+                        filteredTickets.length === 0 ? <p className="text-center text-gray-400 p-8">No tickets found</p> :
+                            filteredTickets
+                                .filter(ticket => ticket.concerts) // safety
+                                .map(ticket => (
+                                    <TicketCard
+                                        key={ticket.id}
+                                        id={ticket.id}
+                                        title={ticket.concerts!.title}
+                                        artist={ticket.concerts!.artist}
+                                        datetime={ticket.concerts!.concert_date}
+                                        venue={ticket.concerts!.venue}
+                                        quantity={ticket.quantity}
+                                        image={ticket.concerts!.poster_url}
+                                        isValidated={ticket.is_validated}
+                                    />
+                                ))
                 }
             </div>
         </section>

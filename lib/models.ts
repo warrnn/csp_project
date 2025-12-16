@@ -16,5 +16,6 @@ export type Ticket = {
     concerts: Concert,
     is_validated: boolean,
     validated_at: string,
-    quantity: number
+    quantity: number,
+    purchase_date: string
 }

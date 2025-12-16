@@ -14,7 +14,9 @@ type TicketCardProps = {
 
 export default function TicketCard({ id, title, artist, datetime, venue, quantity, image, isValidated }: TicketCardProps) {
     return (
-        <Link href={`/tickets/${id}`} className="transition-all cursor-pointer grid sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-(--background) hover:bg-(--background)/95 border border-indigo-600/50 hover:drop-shadow-md hover:drop-shadow-indigo-500 p-8 hover:-translate-y-1 rounded-xl">
+        <Link href={`/tickets/${id}`} className="transition-all cursor-pointer grid sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-(--background) hover:bg-(--background)/95 border-2 border-indigo-600/50 border-dashed hover:drop-shadow-md hover:drop-shadow-indigo-500 p-8 hover:-translate-y-1 rounded-xl"
+            data-aos="flip-down"
+            data-aos-duration="1000">
             <div className="flex flex-col sm:flex-row gap-6 sm:col-span-2 lg:col-span-1 max-lg:mb-4">
                 <img src={image}
                     alt={title}
