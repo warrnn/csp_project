@@ -27,7 +27,7 @@ export default function EditConcert() {
 
     useEffect(() => {
         const fetchConcert = async () => {
-             try {
+            try {
                 const response = await axios.get(`/api/concerts/${id}`);
                 const data = response.data;
                 setFormData({
@@ -42,18 +42,18 @@ export default function EditConcert() {
                 if (data.poster_url) {
                     setImagePreview(data.poster_url);
                 }
-             } catch (error) {
-                 console.error(error);
-                 Swal.fire({
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'Failed to fetch concert details',
                     color: '#fff',
-        background: '#0a0a14',
+                    background: '#0a0a14',
                 });
-             } finally {
-                 setIsLoading(false);
-             }
+            } finally {
+                setIsLoading(false);
+            }
         }
         if (id) {
             fetchConcert();
@@ -99,12 +99,12 @@ export default function EditConcert() {
                 text: 'Concert updated successfully!',
                 showConfirmButton: false,
                 color: '#fff',
-        background: '#0a0a14',
+                background: '#0a0a14',
                 timer: 1500
             }).then(() => {
-                 router.push("/admin/manage");
+                router.push("/admin/manage");
             });
-           
+
         } catch (error) {
             console.error("Error:", error);
             ErrorResponse({ message: "An error occurred while updating the concert." });
@@ -114,11 +114,11 @@ export default function EditConcert() {
     }
 
     if (isLoading && !formData.title) {
-         return (
+        return (
             <section className="py-20 min-h-screen w-full bg-gray-950 text-white flex justify-center items-center">
-                <div className="animate-pulse text-xl font-semibold">Loading...</div>
+                <div className="size-16 rounded-full border-b-2 border-indigo-500 animate-spin self-center mt-16"></div>
             </section>
-         )
+        )
     }
 
     return (
